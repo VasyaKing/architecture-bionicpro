@@ -211,5 +211,22 @@ services:
     ports:
       - "5432:5432"
 
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-olap:5432/olap_db
+      SPRING_DATASOURCE_USERNAME: olap_user
+      SPRING_DATASOURCE_PASSWORD: olap_pass
+      SERVER_PORT: "8000"
+    depends_on:
+      postgres-olap:
+        condition: service_healthy
+    networks:
+      - dag_sample
+
 networks:
   dag_sample:
